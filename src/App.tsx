@@ -24,7 +24,6 @@ export function App() {
 						`
 							h-full
 							overflow-y-auto
-							border-8 border-yellow-500
 							flex
 							flex-col tabAndUp:flex-row
 							tabAndUp:gap-x-[3.625rem] laptopAndUp:gap-x-[7.25rem]
