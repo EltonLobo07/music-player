@@ -10,7 +10,7 @@ export default {
         tabAndUp: "45rem", // 720px
         laptopAndUp: "68.75rem" // 1100px
       },
-      padding: {
+      spacing: {
         "8px": "8px",
         "16px": "16px",
         "24px": "24px",

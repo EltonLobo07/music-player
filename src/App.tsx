@@ -1,8 +1,13 @@
 import { twMerge } from "tailwind-merge";
 import { helpers } from "~/helpers";
 import { styles } from "~/styles";
+import { Header } from "~/components/Header";
+import { SongList } from "~/components/SongList";
+import { MusicPlayer } from "~/components/MusicPlayer";
 
 export function App() {
+	// const [songListType, setSongListType] = React.useState<"personalized" | "top-tracks">("personalized");
+
 	return (
 		<div
 			className = {helpers.formatClassName(
@@ -14,18 +19,46 @@ export function App() {
 		>
 			<div
 				className = {twMerge(
-					styles.maxWidthWrapper,
+					styles.tw.maxWidthWrapper,
 					helpers.formatClassName(
 						`
-							pt-8px tabAndUp:pt-16px laptopAndUp:pt-32px
 							h-full
 							overflow-y-auto
-							border border-black
+							border-8 border-yellow-500
+							flex
+							flex-col tabAndUp:flex-row
+							tabAndUp:gap-x-[3.625rem] laptopAndUp:gap-x-[7.25rem]
+							gap-y-[1.8125rem] tabAndUp:gap-y-0
 						`
 					)
 				)}
 			>
-				Hello world
+				<Header />
+				<main
+					className = {helpers.formatClassName(
+						`
+							flex
+							grow
+							border border-green-500
+						`
+					)}
+				>
+					<SongList
+						className = {helpers.formatClassName(
+							`
+								hidden laptopAndUp:block
+								grow
+							`
+						)}
+					/>
+					<MusicPlayer 
+						className = {helpers.formatClassName(
+							`
+								grow
+							`
+						)}
+					/>
+				</main>
 			</div>
 		</div>
 	);
