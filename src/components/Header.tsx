@@ -2,8 +2,8 @@ import { twMerge } from "tailwind-merge";
 import { helpers } from "~/helpers";
 import { styles } from "~/styles";
 import { ChildAndRefOmittedCompProps } from "~/type-helpers";
-import MusicPlayerUserPic from "~/../public/images/music-player-user.webp";
-import SpotifyLogo from "~/../public/images/spotify-logo.webp";
+import MusicPlayerUserPic from "~/images/music-player-user.webp";
+import SpotifyLogo from "~/images/spotify-logo.webp";
 
 type Props = ChildAndRefOmittedCompProps<"header">;
 
