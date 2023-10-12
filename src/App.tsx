@@ -1,12 +1,38 @@
+import React from "react";
 import { twMerge } from "tailwind-merge";
 import { helpers } from "~/helpers";
 import { styles } from "~/styles";
 import { Header } from "~/components/Header";
 import { SongList } from "~/components/SongList";
 import { MusicPlayer } from "~/components/MusicPlayer";
+import { songsService } from "~/services/songsService";
+import { Song } from "~/types";
 
 export function App() {
-	// const [songListType, setSongListType] = React.useState<"personalized" | "top-tracks">("personalized");
+	const [selectedData, setSelectedData] = 
+		React.useState<
+			{
+				category: "personalized" | "top-tracks",
+				songIdx: number
+			}
+		>(
+			{
+				category: "personalized",
+				songIdx: -1
+			}
+		);
+	const [songs, setSongs] = React.useState<Song[]>([]);
+
+	React.useEffect(() => {
+		void (async () => {
+			try {
+				setSongs(await songsService.getByCategory(selectedData.category));
+			}
+			catch(error) {
+				console.log(error);
+			}
+		})();
+	}, [selectedData.category]);
 
 	return (
 		<div
@@ -43,6 +69,13 @@ export function App() {
 					)}
 				>
 					<SongList
+						$category = {selectedData.category}
+						$onCategoryChange = {newCategory => setSelectedData({
+							category: newCategory,
+							songIdx: -1
+						})}
+						$songIdx = {selectedData.songIdx}
+						$songs = {songs}
 						className = {helpers.formatClassName(
 							`
 								hidden laptopAndUp:block
