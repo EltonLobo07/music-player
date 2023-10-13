@@ -15,13 +15,15 @@ type Props =
         songIdx: number,
         category: "personalized" | "top-tracks",
         songs: SongType[],
-        onCategoryChange: (category: SongCategory) => void
+        onCategoryChange: (category: SongCategory) => void,
+        onSongClick: (songIdx: number) => void
     }>;
 
 export function SongList(props: Props) {
     const {
         $category,
         $onCategoryChange,
+        $onSongClick,
         $songIdx,
         $songs,
         ...otherProps
@@ -114,14 +116,14 @@ export function SongList(props: Props) {
                 <ul>
                     {
                         filteredSongs
-                            .map(song => (
+                            .map((song, songIdx) => (
                                 <Song 
                                     key = {song.id}
                                     $name = {song.name}
                                     $artist = {song.artist}
                                     $coverId = {song.coverId}
                                     $mp3Url = {song.mp3Url}
-                                    $onClick = {() => { }}
+                                    $onClick = {() => $onSongClick(songIdx)}
                                 />
                             ))
                     }

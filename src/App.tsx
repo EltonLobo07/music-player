@@ -38,7 +38,8 @@ export function App() {
 		<div
 			className = {helpers.formatClassName(
 				`
-					bg-blue-300
+					bg-black
+					text-white
 					h-full
 				`
 			)}
@@ -76,14 +77,17 @@ export function App() {
 						})}
 						$songIdx = {selectedData.songIdx}
 						$songs = {songs}
+						$onSongClick = {newSongIdx => setSelectedData({...selectedData, songIdx: newSongIdx})}
 						className = {helpers.formatClassName(
 							`
 								hidden laptopAndUp:block
 								grow
+								mr-[10.125rem]
 							`
 						)}
 					/>
 					<MusicPlayer 
+						$song = {selectedData.songIdx === -1 ? null : songs[selectedData.songIdx]}
 						className = {helpers.formatClassName(
 							`
 								grow
