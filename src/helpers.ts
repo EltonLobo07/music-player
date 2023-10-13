@@ -17,7 +17,35 @@ function formatClassName(classNames: string): string {
     return stack.join("");
 }
 
+function getSingleSpacedStr(arg: string): string {
+    return formatClassName(arg);
+}
+
+function getImageUrlFromCoverId(coverId: string): string {
+    return `https://cms.samespace.com/assets/${coverId}`;
+}
+
+const SEC_IN_ONE_MIN = 60;
+
+function getSecondsPortionOfMColonSSFormat(seconds: number): string {
+    const returnSeconds = Math.floor(seconds % SEC_IN_ONE_MIN);
+    return returnSeconds < 10 ? `0${returnSeconds}` : String(returnSeconds);
+}
+
+function getMinutesPortionOfMColonSSFormat(seconds: number): string {
+    return String(Math.floor(seconds / SEC_IN_ONE_MIN));
+}
+
+function secondsToMColonSSFormat(seconds: number): string { 
+    return `${getMinutesPortionOfMColonSSFormat(seconds)}:${getSecondsPortionOfMColonSSFormat(seconds)}`;
+}
+
 export const helpers = {
     formatClassName,
-    passClassNameIfTruthy
+    passClassNameIfTruthy,
+    getImageUrlFromCoverId,
+    secondsToMColonSSFormat,
+    getSecondsPortionOfMColonSSFormat,
+    getMinutesPortionOfMColonSSFormat,
+    getSingleSpacedStr
 };

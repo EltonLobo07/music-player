@@ -1,15 +1,20 @@
 import React from "react";
 import { twMerge } from "tailwind-merge";
 import { helpers } from "~/helpers";
-import { ChildAndRefOmittedCompProps, CustomProps } from "~/type-helpers";
-import { Song, SongCategory } from "~/types";
+import { styles } from "~/styles";
+import { 
+    ChildAndRefOmittedCompProps, 
+    CustomProps 
+} from "~/type-helpers";
+import { Song as SongType, SongCategory } from "~/types";
+import { Song } from "./Song";
 
 type Props = 
-    ChildAndRefOmittedCompProps<"section"> & 
+    Omit<ChildAndRefOmittedCompProps<"section">, "aria-label"> & 
     CustomProps<{
         songIdx: number,
         category: "personalized" | "top-tracks",
-        songs: Song[],
+        songs: SongType[],
         onCategoryChange: (category: SongCategory) => void
     }>;
 
@@ -23,7 +28,7 @@ export function SongList(props: Props) {
     } = props;
 
     const [filterStr, setFilterStr] = React.useState("");
-
+    
     const lCFilterStr = filterStr.toLowerCase();
     const filteredSongs = $songs.filter(song => (
         song.name.toLowerCase().includes(lCFilterStr)
@@ -31,39 +36,97 @@ export function SongList(props: Props) {
         song.artist.toLowerCase().includes(lCFilterStr)
     ));
 
-    console.log($onCategoryChange);
+    const mainSectionTitle = "song list and filter controls";
+    const filterControlsSectionTitle = "filter controls";
+    const songListSectionTitle = "song list";
+
+    console.log($songIdx);
 
     return (
         <section
             {...otherProps}
+            aria-label = {mainSectionTitle}
             className = {twMerge(
                 helpers.formatClassName(
                     `
                         border border-black
+                        relative
                     `
                 ),
                 otherProps.className
             )}
         >
-            {$category}
-            <input 
-                type = "text"
-                value = {filterStr}
-                onChange = {e => setFilterStr(e.target.value)}
-            />
-            {
-                filteredSongs
-                    .map((song, songIdx) => (
-                        <div
-                            key = {song.id}
-                        >
-                            {song.name}
-                            {
-                                songIdx === $songIdx && " (selected)"
-                            }
-                        </div>
-                    ))
-            }
+            <h2
+                style = {styles.visuallyHidden}
+            >
+                {mainSectionTitle}
+            </h2>
+            <section
+                aria-label = {filterControlsSectionTitle}
+                className = {helpers.formatClassName(
+                    `
+                        relative
+                    `
+                )}
+            >
+                <h3
+                    style = {styles.visuallyHidden}
+                >
+                    {filterControlsSectionTitle}
+                </h3>
+                <div>
+                    <button
+                        type = "button"
+                        aria-label = "display personalized tracks"
+                        onClick = {() => $onCategoryChange("personalized")}
+                        disabled = {$category === "personalized"}
+                    >
+                        for you
+                    </button>
+                    <button
+                        type = "button"
+                        aria-label = "display top tracks"
+                        onClick = {() => $onCategoryChange("top-tracks")}
+                        disabled = {$category === "top-tracks"}
+                    >
+                        top tracks
+                    </button>
+                </div>
+                <input 
+                    type = "text"
+                    value = {filterStr}
+                    onChange = {e => setFilterStr(e.target.value)}
+                />
+            </section>
+            <section
+                aria-label = {songListSectionTitle}
+                className = {helpers.formatClassName(
+                    `
+                        relative
+                    `
+                )}
+            >
+                <h3
+                    style = {styles.visuallyHidden}
+                >
+                    {songListSectionTitle}
+                </h3>
+                <ul>
+                    {
+                        filteredSongs
+                            .map(song => (
+                                <Song 
+                                    key = {song.id}
+                                    $name = {song.name}
+                                    $artist = {song.artist}
+                                    $coverId = {song.coverId}
+                                    $mp3Url = {song.mp3Url}
+                                    $onClick = {() => { }}
+                                />
+                            ))
+                    }
+                </ul>
+            </section>
         </section>
     );
 }
