@@ -108,11 +108,19 @@ export function Header(props: Props) {
                                 laptopAndUp:hidden
                                 flex
                                 justify-center
-                                items-center 
+                                items-center
+                                relative 
                             `
                         )}
                     >
-                        <List />
+                        <span
+                            style = {styles.visuallyHidden}
+                        >
+                            open song list dialog
+                        </span>
+                        <List
+                            aria-hidden
+                        />
                     </button>
                 </SongListDialog>
             </div>
