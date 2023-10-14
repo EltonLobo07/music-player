@@ -8,7 +8,7 @@ export default {
     extend: {
       screens: {
         tabAndUp: "45rem", // 720px
-        laptopAndUp: "68.75rem" // 1100px
+        laptopAndUp: "81.25rem" // 1300px
       },
       spacing: {
         "8px": "8px",

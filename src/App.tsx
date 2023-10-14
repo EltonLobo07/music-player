@@ -49,12 +49,11 @@ export function App() {
 					styles.tw.maxWidthWrapper,
 					helpers.formatClassName(
 						`
-							h-full
-							overflow-y-auto
 							flex
 							flex-col tabAndUp:flex-row
 							tabAndUp:gap-x-[3.625rem] laptopAndUp:gap-x-[7.25rem]
 							gap-y-[1.8125rem] tabAndUp:gap-y-0
+							h-full
 						`
 					)
 				)}
@@ -65,7 +64,7 @@ export function App() {
 						`
 							flex
 							grow
-							border border-green-500
+							tabAndUp:max-h-full
 						`
 					)}
 				>
@@ -75,13 +74,12 @@ export function App() {
 							category: newCategory,
 							songIdx: -1
 						})}
-						$songIdx = {selectedData.songIdx}
 						$songs = {songs}
 						$onSongClick = {newSongIdx => setSelectedData({...selectedData, songIdx: newSongIdx})}
 						className = {helpers.formatClassName(
 							`
-								hidden laptopAndUp:block
-								grow
+								hidden laptopAndUp:flex
+                        		laptopAndUp:flex-col
 								mr-[10.125rem]
 							`
 						)}

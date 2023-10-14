@@ -54,6 +54,10 @@ export function Song(props: Props) {
                     `
                         border border-black
                         relative
+                        px-[16px]
+                        py-4
+                        rounded-[8px]
+                        hover:bg-[#252018]
                     `
                 ),
                 props.className
@@ -108,10 +112,25 @@ export function Song(props: Props) {
                         `
                     )}
                 >
-                    <h3>
+                    <h3
+                        className = {helpers.formatClassName(
+                            `
+                                text-[1.125rem]
+                                leading-6
+                            `
+                        )}
+                    >
                         {$name}
                     </h3>
-                    <p>
+                    <p
+                        className = {helpers.formatClassName(
+                            `
+                                text-[0.875rem]
+                                leading-6
+                                text-[#A29F9B]
+                            `
+                        )}
+                    >
                         {$artist}
                     </p>
                 </div>
@@ -122,6 +141,13 @@ export function Song(props: Props) {
                                 `
                                     ${helpers.getMinutesPortionOfMColonSSFormat(duration)}m
                                     ${helpers.getSecondsPortionOfMColonSSFormat(duration)}s
+                                `
+                            )}
+                            className = {helpers.formatClassName(
+                                `
+                                    text-[1.125rem]
+                                    leading-6
+                                    text-[#A09E9A]
                                 `
                             )}
                         >

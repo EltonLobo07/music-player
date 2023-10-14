@@ -8,11 +8,11 @@ import {
 } from "~/type-helpers";
 import { Song as SongType, SongCategory } from "~/types";
 import { Song } from "./Song";
+import { SearchInput } from "~/components/SearchInput";
 
 type Props = 
     Omit<ChildAndRefOmittedCompProps<"section">, "aria-label"> & 
     CustomProps<{
-        songIdx: number,
         category: "personalized" | "top-tracks",
         songs: SongType[],
         onCategoryChange: (category: SongCategory) => void,
@@ -24,7 +24,6 @@ export function SongList(props: Props) {
         $category,
         $onCategoryChange,
         $onSongClick,
-        $songIdx,
         $songs,
         ...otherProps
     } = props;
@@ -42,7 +41,16 @@ export function SongList(props: Props) {
     const filterControlsSectionTitle = "filter controls";
     const songListSectionTitle = "song list";
 
-    console.log($songIdx);
+    const isTopTracksTabSelected = $category === "top-tracks";
+    const isPersonalizedTabSelected = $category === "personalized";
+    const tabBtnClassName = helpers.formatClassName(
+        `
+            font-bold
+            text-2xl
+            capitalize
+            text-[#8B8882]
+        `
+    );
 
     return (
         <section
@@ -51,8 +59,10 @@ export function SongList(props: Props) {
             className = {twMerge(
                 helpers.formatClassName(
                     `
-                        border border-black
+                        w-[min(100%,27rem)]
                         relative
+                        pt-40px
+                        max-h-full
                     `
                 ),
                 otherProps.className
@@ -68,6 +78,8 @@ export function SongList(props: Props) {
                 className = {helpers.formatClassName(
                     `
                         relative
+                        shrink-0
+                        px-16px
                     `
                 )}
             >
@@ -76,12 +88,26 @@ export function SongList(props: Props) {
                 >
                     {filterControlsSectionTitle}
                 </h3>
-                <div>
+                <div
+                    className = {helpers.formatClassName(
+                        `
+                            flex
+                            flex-wrap
+                            gap-x-10
+                            gap-y-4
+                            mb-8
+                        `
+                    )}
+                >
                     <button
                         type = "button"
                         aria-label = "display personalized tracks"
                         onClick = {() => $onCategoryChange("personalized")}
-                        disabled = {$category === "personalized"}
+                        disabled = {isPersonalizedTabSelected}
+                        className = {twMerge(
+                            tabBtnClassName,
+                            isPersonalizedTabSelected && "text-white"
+                        )}
                     >
                         for you
                     </button>
@@ -89,15 +115,23 @@ export function SongList(props: Props) {
                         type = "button"
                         aria-label = "display top tracks"
                         onClick = {() => $onCategoryChange("top-tracks")}
-                        disabled = {$category === "top-tracks"}
+                        disabled = {isTopTracksTabSelected}
+                        className = {twMerge(
+                            tabBtnClassName,
+                            isTopTracksTabSelected && "text-white"
+                        )}
                     >
                         top tracks
                     </button>
                 </div>
-                <input 
-                    type = "text"
-                    value = {filterStr}
-                    onChange = {e => setFilterStr(e.target.value)}
+                <SearchInput 
+                    className = "mb-6"
+                    $inputProps = {{
+                        type: "text",
+                        value: filterStr,
+                        onChange: e => setFilterStr(e.target.value),
+                        placeholder: "search song, artist"
+                    }}
                 />
             </section>
             <section
@@ -105,6 +139,9 @@ export function SongList(props: Props) {
                 className = {helpers.formatClassName(
                     `
                         relative
+                        grow
+                        overflow-y-auto
+                        p-[4px]
                     `
                 )}
             >
@@ -113,7 +150,15 @@ export function SongList(props: Props) {
                 >
                     {songListSectionTitle}
                 </h3>
-                <ul>
+                <ul
+                    className = {helpers.formatClassName(
+                        `
+                            flex
+                            flex-col
+                            gap-y-[2px]
+                        `
+                    )}
+                >
                     {
                         filteredSongs
                             .map((song, songIdx) => (
@@ -126,6 +171,23 @@ export function SongList(props: Props) {
                                     $onClick = {() => $onSongClick(songIdx)}
                                 />
                             ))
+                    }
+                    {
+                        /*
+                        (new Array(12).fill(undefined)).map((_, idx) => (
+                            <li
+                                key = {idx}
+                                className = {helpers.formatClassName(
+                                    `
+                                        border border-yellow-500
+                                        py-16px
+                                    `
+                                )}
+                            >
+                                test
+                            </li>
+                        ))
+                        */
                     }
                 </ul>
             </section>
