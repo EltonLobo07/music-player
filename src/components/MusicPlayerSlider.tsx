@@ -77,6 +77,9 @@ export function MusicPlayerSlider(props: Props) {
                         rounded-[16px]
                         flex
                         items-center
+                        focus:outline-2
+                        outline-white
+                        cursor-pointer
                     `
                 ),
                 otherProps.className
@@ -104,7 +107,19 @@ export function MusicPlayerSlider(props: Props) {
                     )}
                 />
             </Slider.Track>
-            <Slider.Thumb />
+            <Slider.Thumb 
+                className = {helpers.formatClassName(
+                    `
+                        inline-block
+                        bg-white hover:bg-gray-300
+                        translate-y-[1px]
+                        w-16px
+                        h-16px
+                        rounded-full
+                        focus:shadow-[0_0_0_5px_rgba(178,184,180,0.5)]
+                    `
+                )}
+            />
         </Slider.Root>
     );
 }

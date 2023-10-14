@@ -51,7 +51,7 @@ export function App() {
 						`
 							flex
 							flex-col tabAndUp:flex-row
-							tabAndUp:gap-x-[3.625rem] laptopAndUp:gap-x-[7.25rem]
+							tabAndUp:gap-x-[1.8125rem] laptopAndUp:gap-x-[7.25rem]
 							gap-y-[1.8125rem] tabAndUp:gap-y-0
 							h-full
 						`
@@ -64,6 +64,7 @@ export function App() {
 						`
 							flex
 							grow
+							overflow-y-auto
 							tabAndUp:max-h-full
 						`
 					)}

@@ -4,6 +4,8 @@ import { styles } from "~/styles";
 import { ChildAndRefOmittedCompProps } from "~/type-helpers";
 import MusicPlayerUserPic from "~/images/music-player-user.webp";
 import SpotifyLogo from "~/images/spotify-logo.webp";
+import { SongListDialog } from "~/components/SongListDialog";
+import { List } from "~/components/icons/List";
 
 type Props = ChildAndRefOmittedCompProps<"header">;
 
@@ -24,25 +26,54 @@ export function Header(props: Props) {
                 props.className
             )}
         >
-            <h1
+            <div
                 className = {helpers.formatClassName(
                     `
-                        w-[134px]
-                        h-[40px]
-                        relative
+                        flex
+                        items-center
+                        gap-x-24px
                     `
                 )}
             >
-                <img 
-                    src = {SpotifyLogo}
-                    alt = "company's logo"
-                />
-                <span
-                    style = {styles.visuallyHidden}
+                <h1
+                    className = {helpers.formatClassName(
+                        `
+                            w-[134px]
+                            h-[40px]
+                            relative
+                        `
+                    )}
                 >
-                    spotify
-                </span>
-            </h1>
+                    <img 
+                        src = {SpotifyLogo}
+                        alt = "company's logo"
+                    />
+                    <span
+                        style = {styles.visuallyHidden}
+                    >
+                        spotify
+                    </span>
+                </h1>
+                <SongListDialog>
+                    <button
+                        className = {helpers.formatClassName(
+                            `
+                                w-48px
+                                h-48px
+                                rounded-full
+                              bg-[#24201C]
+                              text-white
+                                laptopAndUp:hidden
+                                flex
+                                justify-center
+                                items-center 
+                            `
+                        )}
+                    >
+                        <List />
+                    </button>
+                </SongListDialog>
+            </div>
             <button
                 disabled
                 type = "button"

@@ -5,6 +5,13 @@ import {
     ChildAndRefOmittedCompProps, 
     CustomProps 
 } from "~/type-helpers";
+import { Dot } from "~/components/Dot";
+import { Previous } from "~/components/icons/Previous";
+import { Pause } from "~/components/icons/Pause";
+import { Play } from "~/components/icons/Play";
+import { Next } from "~/components/icons/Next";
+import { SpeakerXMark } from "~/components/icons/SpeakerXMark";
+import { SpeakerWave } from "~/components/icons/SpeakerWave";
 
 type Props = 
     ChildAndRefOmittedCompProps<"div"> & 
@@ -42,8 +49,9 @@ export function MusicPlayerBtns(props: Props) {
             w-32px
             h-32px
             text-[#9B9A99]
-            rounded-full
-            bg-white
+            flex
+            justify-center
+            items-center
         `
     );
 
@@ -65,6 +73,10 @@ export function MusicPlayerBtns(props: Props) {
                 className = {helpers.formatClassName(
                     `
                         ${cornerBtnsClassName}
+                        flex
+                        justify-center
+                        items-center
+                        gap-x-[4px]
                         relative
                     `
                 )}
@@ -72,14 +84,17 @@ export function MusicPlayerBtns(props: Props) {
                 <span
                     style = {styles.visuallyHidden}
                 >
-                    tbd
+                    do nothing
                 </span>
+                <Dot />
+                <Dot />
+                <Dot />
             </button>
             <div
                 className = {helpers.formatClassName(
                     `
                         flex
-                        gap-x-32px
+                        gap-x-16px tabAndUp:gap-x-32px
                         items-center
                     `
                 )}
@@ -97,8 +112,11 @@ export function MusicPlayerBtns(props: Props) {
                     <span
                         style = {styles.visuallyHidden}
                     >
-                        play previous song
+                        play previous song in the list
                     </span>
+                    <Previous
+                        aria-hidden
+                    />
                 </button>
                 <button
                     onClick = {() => $onPlayingChange(!$playing)}
@@ -109,13 +127,38 @@ export function MusicPlayerBtns(props: Props) {
                             rounded-full
                             bg-white
                             text-black
+                            relative
+                            flex
+                            justify-center
+                            items-center
                         `
                     )}
                 >
+                    <span
+                        style = {styles.visuallyHidden}
+                    >
+                        {
+                            `${$playing ? "pause" : "play"} selected song`
+                        }
+                    </span>
                     {
                         $playing
-                        ? "pause"
-                        : "play"
+                        ? (
+                            <Pause 
+                                aria-hidden
+                            />
+                        )
+                        : (
+                            <Play 
+                                aria-hidden
+                                className = {helpers.formatClassName(
+                                    // horizontal optic centering
+                                    `
+                                        translate-x-[2px]
+                                    `
+                                )}
+                            />
+                        )
                     }
                 </button>
                 <button
@@ -130,8 +173,11 @@ export function MusicPlayerBtns(props: Props) {
                     <span
                         style = {styles.visuallyHidden}
                     >
-                        play next song
+                        play next song in the list
                     </span>
+                    <Next 
+                        aria-hidden
+                    />
                 </button>
             </div>
             <button
@@ -141,18 +187,31 @@ export function MusicPlayerBtns(props: Props) {
                     `
                         ${cornerBtnsClassName}
                         relative
+                        flex
+                        justify-center
+                        items-center
                     `
                 )}
             >
                 <span
                     style = {styles.visuallyHidden}
                 >
-                    mute/unmute music player
+                    {
+                        `${$muted ? "unmute" : "mute"} music player`
+                    }
                 </span>
                 {
                     $muted
-                    ? "unmute"
-                    : "mute"
+                    ? (
+                        <SpeakerXMark 
+                            aria-hidden
+                        />
+                    )
+                    : (
+                        <SpeakerWave 
+                            aria-hidden
+                        />
+                    )
                 }
             </button>
         </div>

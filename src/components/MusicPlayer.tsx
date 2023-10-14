@@ -37,7 +37,6 @@ export function MusicPlayer(props: Props) {
     })());
 
     const setPlayingWrapper = React.useCallback((newPlaying: boolean) => {
-        console.log("setPlayingWrapper run");
         setPlaying(newPlaying);
         const audioElement = audioRef.current;
         if (newPlaying) {
@@ -102,13 +101,23 @@ export function MusicPlayer(props: Props) {
         const playerControlsSectionTitle = "player controls";
         const songDuration = audioRef.current.duration;
         contentJSX = (
-            <div>
+            <div
+                className = {helpers.formatClassName(
+                    `
+                        max-h-full
+                        flex
+                        flex-col
+                    `
+                )}
+            >
                 <section
                     aria-label = {songDetailsSectionTitle}
                     className = {helpers.formatClassName(
                         `
                             relative
                             mb-24px
+                            grow
+                            overflow-y-auto
                         `
                     )}
                 >
@@ -123,6 +132,7 @@ export function MusicPlayer(props: Props) {
                                 relative
                                 flex
                                 flex-col
+                                mb-32px
                             `
                         )}
                     >
@@ -131,7 +141,16 @@ export function MusicPlayer(props: Props) {
                         >
                             selected song
                         </span>
-                        <span>
+                        <span
+                            className = {helpers.formatClassName(
+                                `
+                                    text-[2rem]
+                                    leading-9
+                                    font-bold
+                                    text-white
+                                `
+                            )}
+                        >
                             {$song.name}
                         </span>
                         <span
@@ -139,7 +158,14 @@ export function MusicPlayer(props: Props) {
                         >
                             by
                         </span>
-                        <span>
+                        <span
+                            className = {helpers.formatClassName(
+                                `
+                                    text-base
+                                    text-[#9F9D9A]   
+                                `
+                            )}
+                        >
                             {$song.artist}
                         </span>
                     </div>
@@ -148,9 +174,10 @@ export function MusicPlayer(props: Props) {
                         alt = {`${$song.name} song's cover`}
                         className = {helpers.formatClassName(
                             `
-                                w-[480px]
+                                w-[420px] tabAndUp:w-[480px]
                                 aspect-square
                                 object-center
+                                rounded-[8px]
                             `
                         )}
                     />
@@ -159,6 +186,7 @@ export function MusicPlayer(props: Props) {
                     aria-label = {playerControlsSectionTitle}
                     className = {helpers.formatClassName(
                         `
+                            shrink-0
                             relative
                             flex
                             flex-col
@@ -205,10 +233,12 @@ export function MusicPlayer(props: Props) {
             className = {twMerge(
                 helpers.formatClassName(
                     `
-                        border border-black
                         relative
                         flex
+                        flex-col
                         items-center
+                        overflow-y-auto
+                        py-[8px] tabAndUp:py-[16px]
                     `
                 ),
                 otherProps.className
@@ -219,7 +249,13 @@ export function MusicPlayer(props: Props) {
             >
                 {mainSectionTitle}
             </h2>
+            <div
+                className = "mt-auto"
+            ></div>
             {contentJSX}
+            <div
+                className = "mb-auto"
+            ></div>
         </section>
     );
 }
