@@ -118,6 +118,8 @@ export function MusicPlayer(props: Props) {
                             mb-24px
                             grow
                             overflow-y-auto
+                            flex
+                            flex-col
                         `
                     )}
                 >
@@ -174,7 +176,7 @@ export function MusicPlayer(props: Props) {
                         alt = {`${$song.name} song's cover`}
                         className = {helpers.formatClassName(
                             `
-                                w-[420px] tabAndUp:w-[480px]
+                                w-[360px] tabAndUp:w-[420px] laptopAndUp:w-[480px]
                                 aspect-square
                                 object-center
                                 rounded-[8px]
