@@ -7,6 +7,13 @@ export default {
   theme: {
     extend: {
       screens: {
+        /*
+          IMPORTANT
+          --------------------------------------------------------------------------
+          Look at these components whenever values from this object are manipulated
+            Header
+        */
+
         tabAndUp: "45rem", // 720px
         laptopAndUp: "81.25rem" // 1300px
       },

@@ -7,6 +7,7 @@ import { SongList } from "~/components/SongList";
 import { MusicPlayer } from "~/components/MusicPlayer";
 import { songsService } from "~/services/songsService";
 import { Song } from "~/types";
+import { FilterCustomProps } from "~/type-helpers";
 
 export function App() {
 	const [selectedData, setSelectedData] = 
@@ -34,6 +35,16 @@ export function App() {
 		})();
 	}, [selectedData.category]);
 
+	const songListPropCommonCustomProps: FilterCustomProps<React.ComponentProps<typeof SongList>> = {
+		$category: selectedData.category,
+		$onCategoryChange: newCategory => setSelectedData({
+			category: newCategory,
+			songIdx: -1
+		}),
+		$songs: songs,
+		$onSongClick: newSongIdx => setSelectedData({...selectedData, songIdx: newSongIdx})
+	};
+
 	return (
 		<div
 			className = {helpers.formatClassName(
@@ -58,7 +69,9 @@ export function App() {
 					)
 				)}
 			>
-				<Header />
+				<Header 
+					{...songListPropCommonCustomProps}
+				/>
 				<main
 					className = {helpers.formatClassName(
 						`
@@ -70,13 +83,7 @@ export function App() {
 					)}
 				>
 					<SongList
-						$category = {selectedData.category}
-						$onCategoryChange = {newCategory => setSelectedData({
-							category: newCategory,
-							songIdx: -1
-						})}
-						$songs = {songs}
-						$onSongClick = {newSongIdx => setSelectedData({...selectedData, songIdx: newSongIdx})}
+						{...songListPropCommonCustomProps}
 						className = {helpers.formatClassName(
 							`
 								hidden laptopAndUp:flex

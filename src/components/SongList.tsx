@@ -7,7 +7,7 @@ import {
     CustomProps 
 } from "~/type-helpers";
 import { Song as SongType, SongCategory } from "~/types";
-import { Song } from "./Song";
+import { Song } from "~/components/Song";
 import { SearchInput } from "~/components/SearchInput";
 
 type Props = 
@@ -59,7 +59,7 @@ export function SongList(props: Props) {
             className = {twMerge(
                 helpers.formatClassName(
                     `
-                        w-[min(100%,27rem)]
+                        ${styles.tw.songListWidth}
                         relative
                         pt-40px
                         max-h-full

@@ -18,3 +18,7 @@ export type CompulsoryKeys<
     TKey extends keyof TObj
 > = Omit<TObj, TKey> & 
     Required<Pick<TObj, TKey>>;
+
+export type FilterCustomProps<TObj extends Record<string, unknown>> = {
+    [K in keyof TObj as K extends `$${string}` ? K : never]: TObj[K] 
+};

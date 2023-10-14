@@ -1,18 +1,50 @@
+import React from "react";
 import { twMerge } from "tailwind-merge";
 import { helpers } from "~/helpers";
 import { styles } from "~/styles";
-import { ChildAndRefOmittedCompProps } from "~/type-helpers";
+import { 
+    ChildAndRefOmittedCompProps, 
+    FilterCustomProps 
+} from "~/type-helpers";
 import MusicPlayerUserPic from "~/images/music-player-user.webp";
 import SpotifyLogo from "~/images/spotify-logo.webp";
 import { SongListDialog } from "~/components/SongListDialog";
 import { List } from "~/components/icons/List";
+import { SongList } from "~/components/SongList";
 
-type Props = ChildAndRefOmittedCompProps<"header">;
+type Props = 
+    ChildAndRefOmittedCompProps<"header"> & 
+    FilterCustomProps<React.ComponentProps<typeof SongList>>;
 
 export function Header(props: Props) {
+    const {
+        $category,
+        $onCategoryChange,
+        $songs,
+        $onSongClick,
+        ...otherProps
+    } = props;
+
+    const [songListDialogOpen, setSongListDialogOpen] = React.useState(false);
+    const mqlRef = React.useRef(window.matchMedia("(min-width: 81.25rem)"));
+
+    React.useEffect(() => {
+        const mql = mqlRef.current;
+        const eventName = "change";
+        const eventHandler = (e: MediaQueryListEvent) => {
+            if (e.matches && songListDialogOpen) {
+                setSongListDialogOpen(false);
+            } 
+        };
+        mql.addEventListener(eventName, eventHandler);
+        return () => {
+            mql.removeEventListener(eventName, eventHandler);
+        };
+    }, [songListDialogOpen]);
+
     return (
         <header
-            {...props}
+            {...otherProps}
             className = {twMerge(
                 helpers.formatClassName(
                     `
@@ -23,7 +55,7 @@ export function Header(props: Props) {
                         gap-2
                     `
                 ),
-                props.className
+                otherProps.className
             )}
         >
             <div
@@ -54,12 +86,22 @@ export function Header(props: Props) {
                         spotify
                     </span>
                 </h1>
-                <SongListDialog>
+                <SongListDialog
+                    open = {songListDialogOpen}
+                    onOpenChange = {setSongListDialogOpen}
+                    $category = {$category}
+                    $onCategoryChange = {$onCategoryChange}
+                    $songs = {$songs}
+                    $onSongClick = {newSongIdx => {
+                        setSongListDialogOpen(false);
+                        $onSongClick(newSongIdx);
+                    }}
+                >
                     <button
                         className = {helpers.formatClassName(
                             `
-                                w-48px
-                                h-48px
+                                w-40px
+                                h-40px
                                 rounded-full
                               bg-[#24201C]
                               text-white

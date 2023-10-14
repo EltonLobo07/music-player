@@ -21,6 +21,7 @@ export const styles = {
                 max-w-[94.5rem]
                 mx-auto
             `
-        )
+        ),
+        songListWidth: "w-[min(100%,27rem)]"
     }
 };
