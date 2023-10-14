@@ -88,6 +88,25 @@ export function App() {
 					/>
 					<MusicPlayer 
 						$song = {selectedData.songIdx === -1 ? null : songs[selectedData.songIdx]}
+						$onNextSongBtnClick = {() => {
+							if (songs.length > 1 && selectedData.songIdx !== -1) {
+								setSelectedData({
+									...selectedData,
+									songIdx: (selectedData.songIdx + 1) % songs.length
+								});
+							}
+						}}
+						$onPrevSongBtnClick = {() => {
+							if (songs.length > 1 && selectedData.songIdx !== -1) {
+								setSelectedData({
+									...selectedData,
+									songIdx: 
+										selectedData.songIdx === 0
+										? songs.length - 1
+										: selectedData.songIdx - 1
+								});
+							}
+						}}
 						className = {helpers.formatClassName(
 							`
 								grow

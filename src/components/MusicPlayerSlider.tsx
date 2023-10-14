@@ -2,18 +2,72 @@ import React from "react";
 import * as Slider from '@radix-ui/react-slider';
 import { helpers } from '~/helpers';
 import { twMerge } from "tailwind-merge";
+import { ChildAndRefOmittedCompProps, CompulsoryKeys } from "~/type-helpers";
 
-type Props = {
-    className?: string
-};
+type Props = 
+    CompulsoryKeys<
+        Omit<ChildAndRefOmittedCompProps<typeof Slider.Root>, "onPointerDown" | "onPointerUp">, 
+        "value" | "onValueChange"
+    >;
 
 export function MusicPlayerSlider(props: Props) {
-    const [value, setValue] = React.useState([0]);
+    const {
+        value,
+        onValueChange,
+        ...otherProps
+    } = props;
+
+    const [mouseDownState, setMouseDownState] = React.useState<
+        | {
+            captureValue: true,
+            internalValue: number[]
+        }
+        | {
+            captureValue: false,
+            internalValue: null
+        }
+    >({
+        captureValue: false,
+        internalValue: null
+    });
+
+    const internalStartValueRef = React.useRef<number | null>(null);
 
     return (
         <Slider.Root
-            value = {value}
-            onValueChange = {newValue => setValue(newValue)}
+            {...otherProps}
+            {
+                ...mouseDownState.captureValue
+                ? {
+                    value: mouseDownState.internalValue, 
+                    onValueChange: (newValue) => setMouseDownState({...mouseDownState, internalValue: newValue})
+                  }
+                : {
+                    value, 
+                    onValueChange
+                  }
+            }
+            onPointerDown = {() => {
+                internalStartValueRef.current = value[0];
+                setMouseDownState({
+                    captureValue: true,
+                    internalValue: value
+                });
+            }}
+            onPointerUp = {async () => {
+                if (
+                    mouseDownState.captureValue && 
+                    internalStartValueRef.current !== mouseDownState.internalValue[0]
+                ) {
+                    onValueChange(mouseDownState.internalValue);
+                    await new Promise(resolve => setTimeout(() => resolve(undefined), 300));
+                }
+                internalStartValueRef.current = null;
+                setMouseDownState({
+                    captureValue: false,
+                    internalValue: null
+                });
+            }}
             className = {twMerge(
                 helpers.formatClassName(
                     `   
@@ -25,7 +79,7 @@ export function MusicPlayerSlider(props: Props) {
                         items-center
                     `
                 ),
-                props.className
+                otherProps.className
             )}
         >
             <Slider.Track

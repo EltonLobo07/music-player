@@ -1,11 +1,33 @@
 import { twMerge } from "tailwind-merge";
 import { helpers } from "~/helpers";
 import { styles } from "~/styles";
-import { ChildAndRefOmittedCompProps } from "~/type-helpers";
+import { 
+    ChildAndRefOmittedCompProps, 
+    CustomProps 
+} from "~/type-helpers";
 
-type Props = ChildAndRefOmittedCompProps<"div">;
+type Props = 
+    ChildAndRefOmittedCompProps<"div"> & 
+    CustomProps<{
+        muted: boolean,
+        playing: boolean,
+        onMutedChange: (newMuted: boolean) => void,
+        onPlayingChange: (newPlaying: boolean) => void,
+        onNextSongBtnClick: () => void,
+        onPreviousSongBtnClick: () => void
+    }>;
 
 export function MusicPlayerBtns(props: Props) {
+    const {
+        $muted,
+        $playing,
+        $onMutedChange,
+        $onPlayingChange,
+        $onNextSongBtnClick,
+        $onPreviousSongBtnClick,
+        ...otherProps
+    } = props;
+
     const cornerBtnsClassName = helpers.formatClassName(
         `
             w-48px
@@ -27,7 +49,7 @@ export function MusicPlayerBtns(props: Props) {
 
     return (
         <div
-            {...props}
+            {...otherProps}
             className = {twMerge(
                 helpers.formatClassName(
                     `   
@@ -35,7 +57,7 @@ export function MusicPlayerBtns(props: Props) {
                         justify-between
                     `
                 ),
-                props.className
+                otherProps.className
             )}
         >
             <button
@@ -63,6 +85,8 @@ export function MusicPlayerBtns(props: Props) {
                 )}
             >
                 <button
+                    type = "button"
+                    onClick = {$onPreviousSongBtnClick}
                     className = {helpers.formatClassName(
                         `
                             ${btnsNearPlayPauseClassName}
@@ -77,6 +101,7 @@ export function MusicPlayerBtns(props: Props) {
                     </span>
                 </button>
                 <button
+                    onClick = {() => $onPlayingChange(!$playing)}
                     className = {helpers.formatClassName(
                         `
                             w-48px
@@ -87,9 +112,14 @@ export function MusicPlayerBtns(props: Props) {
                         `
                     )}
                 >
-                    play/pause selected song
+                    {
+                        $playing
+                        ? "pause"
+                        : "play"
+                    }
                 </button>
                 <button
+                    onClick = {$onNextSongBtnClick}
                     className = {helpers.formatClassName(
                         `
                             ${btnsNearPlayPauseClassName}
@@ -106,6 +136,7 @@ export function MusicPlayerBtns(props: Props) {
             </div>
             <button
                 type = "button"
+                onClick = {() => $onMutedChange(!$muted)}
                 className = {helpers.formatClassName(
                     `
                         ${cornerBtnsClassName}
@@ -118,6 +149,11 @@ export function MusicPlayerBtns(props: Props) {
                 >
                     mute/unmute music player
                 </span>
+                {
+                    $muted
+                    ? "unmute"
+                    : "mute"
+                }
             </button>
         </div>
     );

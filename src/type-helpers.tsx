@@ -12,3 +12,9 @@ export type CustomProps<TObj extends Record<string, unknown>> = {
     */
     [K in keyof TObj as `$${string & K}`]: TObj[K]
 };
+
+export type CompulsoryKeys<
+    TObj extends object,
+    TKey extends keyof TObj
+> = Omit<TObj, TKey> & 
+    Required<Pick<TObj, TKey>>;
