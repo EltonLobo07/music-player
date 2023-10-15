@@ -8,7 +8,7 @@ import { helpers } from "~/helpers";
 import React from "react";
 import { styles } from "~/styles";
 import { Loading } from "~/components/Loading";
-import { Song, SongFetchStatus } from "~/types";
+import { Song, FetchStatus } from "~/types";
 import { MusicPlayerSlider } from "~/components/MusicPlayerSlider";
 import { MusicPlayerBtns } from "~/components/MusicPlayerBtns";
 
@@ -22,7 +22,7 @@ type Props =
             | "coverId"
         >,
         songDuration: number,
-        songFetchStatus: SongFetchStatus,
+        songFetchStatus: FetchStatus,
         value: number[],
         onValueChange: (newValue: number) => void,
         muted: boolean,

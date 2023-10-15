@@ -6,9 +6,11 @@ import {
     ChildAndRefOmittedCompProps, 
     CustomProps 
 } from "~/type-helpers";
-import { Song as SongType, SongCategory } from "~/types";
+import { Song as SongType, SongCategory, FetchStatus } from "~/types";
 import { Song } from "~/components/Song";
 import { SearchInput } from "~/components/SearchInput";
+import { Loading } from "./Loading";
+import { SadFace } from "./icons/SadFace";
 
 type Props = 
     Omit<ChildAndRefOmittedCompProps<"section">, "aria-label"> & 
@@ -16,7 +18,8 @@ type Props =
         category: "personalized" | "top-tracks",
         songs: SongType[],
         onCategoryChange: (category: SongCategory) => void,
-        onSongClick: (songIdx: number) => void
+        onSongClick: (songIdx: number) => void,
+        fetchStatus: FetchStatus
     }>;
 
 export function SongList(props: Props) {
@@ -25,6 +28,7 @@ export function SongList(props: Props) {
         $onCategoryChange,
         $onSongClick,
         $songs,
+        $fetchStatus,
         ...otherProps
     } = props;
 
@@ -50,6 +54,105 @@ export function SongList(props: Props) {
             capitalize
             text-white/50
         `
+    );
+
+    const contentJSX = (
+        <>
+            <Loading
+                $showLoadingMsg
+                $showLoadedMsg = {$fetchStatus === "error"}
+                $loading = {$fetchStatus === "loading"}
+            >
+                {
+                    $fetchStatus === "loading"
+                    ? "Loading songs"
+                    : $fetchStatus === "error" 
+                      ? (
+                        <span
+                            className = {helpers.formatClassName(
+                                `
+                                    text-red-500
+                                    text-sm
+                                `
+                            )}
+                        >
+                            Failed to load songs. Please try again.
+                        </span>
+                      ) 
+                      : "Loaded songs"
+                }
+            </Loading>
+            {
+                $fetchStatus === "loaded" && (
+                    filteredSongs.length === 0
+                    ? (
+                        <p
+                            className = {helpers.formatClassName(
+                                `
+                                    text-white/60
+                                    text-lg
+                                    text-center
+                                    flex
+                                    flex-col
+                                    gap-y-8px
+                                    items-center
+                                `
+                            )}
+                        >
+                            <SadFace
+                                aria-hidden 
+                            />
+                            <span>
+                                No songs to display
+                            </span>
+                        </p>
+                    )
+                    : (
+                        <ul
+                            className = {helpers.formatClassName(
+                                `
+                                    flex
+                                    flex-col
+                                    gap-y-[2px]
+                                `
+                            )}
+                        >
+                            {
+                                filteredSongs
+                                    .map((song, songIdx) => (
+                                        <Song 
+                                            key = {song.id}
+                                            $name = {song.name}
+                                            $artist = {song.artist}
+                                            $coverId = {song.coverId}
+                                            $mp3Url = {song.mp3Url}
+                                            $onClick = {() => $onSongClick(songIdx)}
+                                            $selfShowDelayInMs = {songIdx * 75}
+                                        />
+                                    ))
+                            }
+                            {
+                                /*
+                                (new Array(12).fill(undefined)).map((_, idx) => (
+                                    <li
+                                        key = {idx}
+                                        className = {helpers.formatClassName(
+                                            `
+                                                border border-yellow-500
+                                                py-16px
+                                            `
+                                        )}
+                                    >
+                                        test
+                                    </li>
+                                ))
+                                */
+                            }
+                        </ul>
+                    )   
+                )
+            }
+        </>
     );
 
     return (
@@ -150,47 +253,7 @@ export function SongList(props: Props) {
                 >
                     {songListSectionTitle}
                 </h3>
-                <ul
-                    className = {helpers.formatClassName(
-                        `
-                            flex
-                            flex-col
-                            gap-y-[2px]
-                        `
-                    )}
-                >
-                    {
-                        filteredSongs
-                            .map((song, songIdx) => (
-                                <Song 
-                                    key = {song.id}
-                                    $name = {song.name}
-                                    $artist = {song.artist}
-                                    $coverId = {song.coverId}
-                                    $mp3Url = {song.mp3Url}
-                                    $onClick = {() => $onSongClick(songIdx)}
-                                    $selfShowDelayInMs = {songIdx * 75}
-                                />
-                            ))
-                    }
-                    {
-                        /*
-                        (new Array(12).fill(undefined)).map((_, idx) => (
-                            <li
-                                key = {idx}
-                                className = {helpers.formatClassName(
-                                    `
-                                        border border-yellow-500
-                                        py-16px
-                                    `
-                                )}
-                            >
-                                test
-                            </li>
-                        ))
-                        */
-                    }
-                </ul>
+                {contentJSX}
             </section>
         </section>
     );

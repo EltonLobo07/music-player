@@ -6,7 +6,7 @@ import {
     ChildAndRefOmittedCompProps, 
     CustomProps 
 } from "~/type-helpers";
-import { Song, SongFetchStatus } from "~/types";
+import { Song,FetchStatus } from "~/types";
 import { MusicPlayerInternal } from "~/components/MusicPlayerInternal";
 
 type Props = 
@@ -28,7 +28,7 @@ export function MusicPlayer(props: Props) {
     const [value, setValue] = React.useState([0]);
     const [playing, setPlaying] = React.useState(false);
     const [muted, setMuted] = React.useState(false);
-    const [songFetchStatus, setSongFetchStatus] = React.useState<SongFetchStatus>("loaded");
+    const [songFetchStatus, setSongFetchStatus] = React.useState<FetchStatus>("loaded");
     const audioRef = React.useRef((() => {
         const audioElement = document.createElement("audio");
         audioElement.loop = true;

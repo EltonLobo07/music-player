@@ -6,7 +6,7 @@ import { Header } from "~/components/Header";
 import { SongList } from "~/components/SongList";
 import { MusicPlayer } from "~/components/MusicPlayer";
 import { songsService } from "~/services/songsService";
-import { Song } from "~/types";
+import { FetchStatus, Song } from "~/types";
 import { FilterCustomProps } from "~/type-helpers";
 import { Background } from "~/components/Background";
 
@@ -24,16 +24,20 @@ export function App() {
 			}
 		);
 	const [songs, setSongs] = React.useState<Song[]>([]);
+	const [songsFetchStatus, setSongsFetchStatus] = React.useState<FetchStatus>("loading");
 
 	React.useEffect(() => {
-		void (async () => {
+		setSongsFetchStatus("loading");
+		setTimeout(async () => {
 			try {
 				setSongs(await songsService.getByCategory(selectedData.category));
+				setSongsFetchStatus("loaded");
 			}
 			catch(error) {
-				console.log(error);
+				setSongsFetchStatus("error");
+				console.log("Error while fetching songs:", error);
 			}
-		})();
+		}, 250);
 	}, [selectedData.category]);
 
 	const songListPropCommonCustomProps: FilterCustomProps<React.ComponentProps<typeof SongList>> = {
@@ -43,7 +47,8 @@ export function App() {
 			songIdx: -1
 		}),
 		$songs: songs,
-		$onSongClick: newSongIdx => setSelectedData({...selectedData, songIdx: newSongIdx})
+		$onSongClick: newSongIdx => setSelectedData({...selectedData, songIdx: newSongIdx}),
+		$fetchStatus: songsFetchStatus
 	};
 
 	return (

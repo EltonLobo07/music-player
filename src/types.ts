@@ -1,6 +1,6 @@
 export type SongCategory = "personalized" | "top-tracks";
 
-export type SongFetchStatus = "loaded" | "loading" | "error";
+export type FetchStatus = "loaded" | "loading" | "error";
 
 export type Song = 
     Record<
