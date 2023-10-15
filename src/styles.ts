@@ -22,6 +22,16 @@ export const styles = {
                 mx-auto
             `
         ),
-        songListWidth: "w-[min(100%,27rem)]"
+        songListWidth: "w-[min(100%,27rem)]",
+        roundedBtn: helpers.formatClassName(
+            `
+                w-[48px]
+                h-[48px]
+                rounded-full
+                bg-white/10
+                text-white
+                hover:text-gray-300
+            `
+        )
     }
 };

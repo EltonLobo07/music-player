@@ -91,7 +91,7 @@ export function MusicPlayerSlider(props: Props) {
                         grow
                         relative
                         h-full
-                        bg-[#383635]
+                        bg-white/30
                         rounded-[inherit]
                     `
                 )}

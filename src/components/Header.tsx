@@ -98,18 +98,29 @@ export function Header(props: Props) {
                     }}
                 >
                     <button
+                        type = "button"
+                        disabled = {songListDialogOpen}
                         className = {helpers.formatClassName(
                             `
-                                w-40px
-                                h-40px
-                                rounded-full
-                              bg-[#24201C]
+                                ${
+                                    twMerge(
+                                        styles.tw.roundedBtn,
+                                        "w-[40px] h-[40px] bg-transparent"
+                                    )
+                                }
                               text-white
                                 laptopAndUp:hidden
                                 flex
                                 justify-center
                                 items-center
-                                relative 
+                                relative
+                                transition-opacity
+                                duration-500
+                                ${
+                                    songListDialogOpen
+                                    ? "opacity-0"
+                                    : "opacity-1"
+                                } 
                             `
                         )}
                     >

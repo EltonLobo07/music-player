@@ -5,6 +5,7 @@ import { SongList } from '~/components/SongList';
 import { FilterCustomProps } from '~/type-helpers';
 import { styles } from '~/styles';
 import { X } from '~/components/icons/X';
+import { twMerge } from 'tailwind-merge';
 
 type Props = 
     ComponentProps<typeof Dialog.Root> &
@@ -43,12 +44,11 @@ export function SongListDialog(props: Props) {
                             bottom-0
                             left-0
                             max-w-full
-                            bg-black
+                            bg-black/50
                             flex
                             flex-col
                             ${styles.tw.songListWidth}
-                            border-r
-                            border-[#2A2419]
+                            backdrop-blur-lg
                         `
                     )}
                 >
@@ -69,11 +69,12 @@ export function SongListDialog(props: Props) {
                         <button
                             className = {helpers.formatClassName(
                                 `
-                                    text-white
-                                    w-40px
-                                    h-40px
-                                    rounded-full
-                                    bg-[#24201C]
+                                   ${
+                                        twMerge(
+                                            styles.tw.roundedBtn,
+                                            "w-[40px] h-[40px] bg-transparent"   
+                                        )
+                                   }
                                     flex
                                     justify-center
                                     items-center

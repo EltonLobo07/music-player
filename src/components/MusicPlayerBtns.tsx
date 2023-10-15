@@ -35,15 +35,11 @@ export function MusicPlayerBtns(props: Props) {
         ...otherProps
     } = props;
 
-    const cornerBtnsClassName = helpers.formatClassName(
-        `
-            w-48px
-            h-48px
-            rounded-full
-            bg-[#24201C]
-            text-white
-        `
+    const cornerBtnsClassName = twMerge(
+        styles.tw.roundedBtn
     );
+
+    // #373634
     const btnsNearPlayPauseClassName = helpers.formatClassName(
         `
             w-32px
