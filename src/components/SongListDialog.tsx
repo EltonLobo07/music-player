@@ -62,6 +62,7 @@ export function SongListDialog(props: Props) {
                         className = {helpers.formatClassName(
                             `
                                 w-full
+                                h-full
                                 flex
                                 flex-col
                                 bg-black/50
