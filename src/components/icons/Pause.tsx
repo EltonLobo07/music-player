@@ -10,7 +10,7 @@ export function Pause(props: Props) {
             xmlns = "http://www.w3.org/2000/svg"
             fill = "currentColor"
             stroke = "currentColor"
-            strokeWidth = "3"
+            strokeWidth = "6"
             viewBox = "0 0 24 24"
             {...props}
             className = {twMerge(

@@ -12,6 +12,7 @@ import { Play } from "~/components/icons/Play";
 import { Next } from "~/components/icons/Next";
 import { SpeakerXMark } from "~/components/icons/SpeakerXMark";
 import { SpeakerWave } from "~/components/icons/SpeakerWave";
+import { ControlBtnWrapper } from "./ControlBtn";
 
 type Props = 
     ChildAndRefOmittedCompProps<"div"> & 
@@ -39,12 +40,11 @@ export function MusicPlayerBtns(props: Props) {
         styles.tw.roundedBtn
     );
 
-    // #373634
     const btnsNearPlayPauseClassName = helpers.formatClassName(
         `
             w-32px
             h-32px
-            text-[#9B9A99]
+            text-white/60
             flex
             justify-center
             items-center
@@ -59,33 +59,38 @@ export function MusicPlayerBtns(props: Props) {
                     `   
                         flex
                         justify-between
+                        px-[2px]
                     `
                 ),
                 otherProps.className
             )}
         >
-            <button
-                type = "button"
-                className = {helpers.formatClassName(
-                    `
-                        ${cornerBtnsClassName}
-                        flex
-                        justify-center
-                        items-center
-                        gap-x-[4px]
-                        relative
-                    `
-                )}
+            <ControlBtnWrapper
+                toolTipContent = "This button does nothing."
             >
-                <span
-                    style = {styles.visuallyHidden}
+                <button
+                    type = "button"
+                    className = {helpers.formatClassName(
+                        `
+                            ${cornerBtnsClassName}
+                            flex
+                            justify-center
+                            items-center
+                            gap-x-[4px]
+                            relative
+                        `
+                    )}
                 >
-                    do nothing
-                </span>
-                <Dot />
-                <Dot />
-                <Dot />
-            </button>
+                    <span
+                        style = {styles.visuallyHidden}
+                    >
+                        do nothing
+                    </span>
+                    <Dot />
+                    <Dot />
+                    <Dot />
+                </button>
+            </ControlBtnWrapper>
             <div
                 className = {helpers.formatClassName(
                     `
@@ -95,34 +100,108 @@ export function MusicPlayerBtns(props: Props) {
                     `
                 )}
             >
+                <ControlBtnWrapper
+                    toolTipContent = "play previous song in the list"
+                >
+                    <button
+                        type = "button"
+                        onClick = {$onPreviousSongBtnClick}
+                        className = {helpers.formatClassName(
+                            `
+                                ${btnsNearPlayPauseClassName}
+                                relative
+                            `
+                        )}
+                    >
+                        <span
+                            style = {styles.visuallyHidden}
+                        >
+                            play previous song in the list
+                        </span>
+                        <Previous
+                            aria-hidden
+                        />
+                    </button>
+                </ControlBtnWrapper>
+                <ControlBtnWrapper
+                    toolTipContent = {`${$playing ? "pause" : "play"} selected song`}
+                >
+                    <button
+                        onClick = {() => $onPlayingChange(!$playing)}
+                        className = {helpers.formatClassName(
+                            `
+                                w-48px
+                                h-48px
+                                rounded-full
+                                bg-white
+                                text-black
+                                relative
+                                flex
+                                justify-center
+                                items-center
+                            `
+                        )}
+                    >
+                        <span
+                            style = {styles.visuallyHidden}
+                        >
+                            {
+                                `${$playing ? "pause" : "play"} selected song`
+                            }
+                        </span>
+                        {
+                            $playing
+                            ? (
+                                <Pause 
+                                    aria-hidden
+                                />
+                            )
+                            : (
+                                <Play 
+                                    aria-hidden
+                                    className = {helpers.formatClassName(
+                                        // horizontal optic centering
+                                        `
+                                            translate-x-[2px]
+                                        `
+                                    )}
+                                />
+                            )
+                        }
+                    </button>
+                </ControlBtnWrapper>
+                <ControlBtnWrapper
+                    toolTipContent = "play next song in the list"
+                >
+                    <button
+                        onClick = {$onNextSongBtnClick}
+                        className = {helpers.formatClassName(
+                            `
+                                ${btnsNearPlayPauseClassName}
+                                relative
+                            `
+                        )}
+                    >
+                        <span
+                            style = {styles.visuallyHidden}
+                        >
+                            play next song in the list
+                        </span>
+                        <Next 
+                            aria-hidden
+                        />
+                    </button>
+                </ControlBtnWrapper>
+            </div>
+            <ControlBtnWrapper
+                toolTipContent = {`${$muted ? "unmute" : "mute"} music player`}
+            >
                 <button
                     type = "button"
-                    onClick = {$onPreviousSongBtnClick}
+                    onClick = {() => $onMutedChange(!$muted)}
                     className = {helpers.formatClassName(
                         `
-                            ${btnsNearPlayPauseClassName}
-                            relative
-                        `
-                    )}
-                >
-                    <span
-                        style = {styles.visuallyHidden}
-                    >
-                        play previous song in the list
-                    </span>
-                    <Previous
-                        aria-hidden
-                    />
-                </button>
-                <button
-                    onClick = {() => $onPlayingChange(!$playing)}
-                    className = {helpers.formatClassName(
-                        `
-                            w-48px
-                            h-48px
-                            rounded-full
-                            bg-white
-                            text-black
+                            ${cornerBtnsClassName}
                             relative
                             flex
                             justify-center
@@ -134,82 +213,24 @@ export function MusicPlayerBtns(props: Props) {
                         style = {styles.visuallyHidden}
                     >
                         {
-                            `${$playing ? "pause" : "play"} selected song`
+                            `${$muted ? "unmute" : "mute"} music player`
                         }
                     </span>
                     {
-                        $playing
+                        $muted
                         ? (
-                            <Pause 
+                            <SpeakerXMark 
                                 aria-hidden
                             />
                         )
                         : (
-                            <Play 
+                            <SpeakerWave 
                                 aria-hidden
-                                className = {helpers.formatClassName(
-                                    // horizontal optic centering
-                                    `
-                                        translate-x-[2px]
-                                    `
-                                )}
                             />
                         )
                     }
                 </button>
-                <button
-                    onClick = {$onNextSongBtnClick}
-                    className = {helpers.formatClassName(
-                        `
-                            ${btnsNearPlayPauseClassName}
-                            relative
-                        `
-                    )}
-                >
-                    <span
-                        style = {styles.visuallyHidden}
-                    >
-                        play next song in the list
-                    </span>
-                    <Next 
-                        aria-hidden
-                    />
-                </button>
-            </div>
-            <button
-                type = "button"
-                onClick = {() => $onMutedChange(!$muted)}
-                className = {helpers.formatClassName(
-                    `
-                        ${cornerBtnsClassName}
-                        relative
-                        flex
-                        justify-center
-                        items-center
-                    `
-                )}
-            >
-                <span
-                    style = {styles.visuallyHidden}
-                >
-                    {
-                        `${$muted ? "unmute" : "mute"} music player`
-                    }
-                </span>
-                {
-                    $muted
-                    ? (
-                        <SpeakerXMark 
-                            aria-hidden
-                        />
-                    )
-                    : (
-                        <SpeakerWave 
-                            aria-hidden
-                        />
-                    )
-                }
-            </button>
+            </ControlBtnWrapper>
         </div>
     );
 }

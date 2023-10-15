@@ -6,9 +6,8 @@ import {
     ChildAndRefOmittedCompProps, 
     CustomProps 
 } from "~/type-helpers";
-import { Song } from "~/types";
-import { MusicPlayerSlider } from "~/components/MusicPlayerSlider";
-import { MusicPlayerBtns } from "~/components/MusicPlayerBtns";
+import { Song, SongFetchStatus } from "~/types";
+import { MusicPlayerInternal } from "~/components/MusicPlayerInternal";
 
 type Props = 
     Omit<ChildAndRefOmittedCompProps<"section">, "aria-label"> & 
@@ -29,10 +28,11 @@ export function MusicPlayer(props: Props) {
     const [value, setValue] = React.useState([0]);
     const [playing, setPlaying] = React.useState(false);
     const [muted, setMuted] = React.useState(false);
-    const [loading, setLoading] = React.useState(false);
+    const [songFetchStatus, setSongFetchStatus] = React.useState<SongFetchStatus>("loaded");
     const audioRef = React.useRef((() => {
         const audioElement = document.createElement("audio");
         audioElement.loop = true;
+        audioElement.preload = "auto";
         return audioElement;
     })());
 
@@ -61,22 +61,26 @@ export function MusicPlayer(props: Props) {
         if (songMp3Url === undefined) {
             audioRef.current.pause();
         } else {
-            setLoading(true);
+            setSongFetchStatus("loading");
             const audioElement = audioRef.current;
-            let eventHandlerRemoved = false;
-            const eventName = "canplaythrough";
-            const eventHandler = () => {
-                setLoading(false);
+            let canPlayThroughEventHandlerRemoved = false;
+            const canPlayThroughEventName = "canplaythrough";
+            const canPlayThroughEventHandler = () => {
+                setSongFetchStatus("loaded");
                 setValue([0]);
                 setPlayingWrapper(true);
-                eventHandlerRemoved = true;
+                canPlayThroughEventHandlerRemoved = true;
             };
-            audioElement.addEventListener(eventName, eventHandler, {once: true});
+            const errorEventName = "error";
+            const errorEventHandler = () => setSongFetchStatus("error");
+            audioElement.addEventListener(canPlayThroughEventName, canPlayThroughEventHandler, {once: true});
+            audioElement.addEventListener(errorEventName, errorEventHandler);
             audioElement.src = songMp3Url;
             return () => {
-                if (!eventHandlerRemoved) {
-                    audioElement.removeEventListener(eventName, eventHandler);
+                if (!canPlayThroughEventHandlerRemoved) {
+                    audioElement.removeEventListener(canPlayThroughEventName, canPlayThroughEventHandler);
                 }
+                audioElement.removeEventListener(errorEventName, errorEventHandler);
             };
         }
     }, [songMp3Url, setPlayingWrapper]);
@@ -92,137 +96,32 @@ export function MusicPlayer(props: Props) {
     }, []);
 
     let contentJSX: React.JSX.Element = (
-        <p>
-            Select a song from the song list
+        <p
+            className = {helpers.formatClassName(
+                `
+                    text-white/60
+                `
+            )}
+        >
+            Select a song from the list
         </p>
     );
     if ($song) {
-        const songDetailsSectionTitle = "song details";
-        const playerControlsSectionTitle = "player controls";
-        const songDuration = audioRef.current.duration;
         contentJSX = (
-            <div
-                className = {helpers.formatClassName(
-                    `
-                        max-h-full
-                        flex
-                        flex-col
-                    `
-                )}
-            >
-                <section
-                    aria-label = {songDetailsSectionTitle}
-                    className = {helpers.formatClassName(
-                        `
-                            relative
-                            mb-24px
-                            grow
-                            overflow-y-auto
-                            flex
-                            flex-col
-                        `
-                    )}
-                >
-                    <h3
-                        style = {styles.visuallyHidden}
-                    >
-                        {songDetailsSectionTitle}
-                    </h3>
-                    <div
-                        className = {helpers.formatClassName(
-                            `
-                                relative
-                                flex
-                                flex-col
-                                mb-32px
-                            `
-                        )}
-                    >
-                        <span
-                            style = {styles.visuallyHidden}
-                        >
-                            selected song
-                        </span>
-                        <span
-                            className = {helpers.formatClassName(
-                                `
-                                    text-[2rem]
-                                    leading-9
-                                    font-bold
-                                    text-white
-                                `
-                            )}
-                        >
-                            {$song.name}
-                        </span>
-                        <span
-                            style = {styles.visuallyHidden}
-                        >
-                            by
-                        </span>
-                        <span
-                            className = {helpers.formatClassName(
-                                `
-                                    text-base
-                                    text-[#9F9D9A]   
-                                `
-                            )}
-                        >
-                            {$song.artist}
-                        </span>
-                    </div>
-                    <img 
-                        src = {helpers.getImageUrlFromCoverId($song.coverId)}
-                        alt = {`${$song.name} song's cover`}
-                        className = {helpers.formatClassName(
-                            `
-                                w-[360px] tabAndUp:w-[420px] laptopAndUp:w-[480px]
-                                aspect-square
-                                object-center
-                                rounded-[8px]
-                            `
-                        )}
-                    />
-                </section>
-                <section
-                    aria-label = {playerControlsSectionTitle}
-                    className = {helpers.formatClassName(
-                        `
-                            shrink-0
-                            relative
-                            flex
-                            flex-col
-                            gap-y-32px
-                        `
-                    )}
-                >
-                    <h3
-                        style = {styles.visuallyHidden}
-                    >
-                        {playerControlsSectionTitle}
-                    </h3>
-                    <MusicPlayerSlider
-                        value = {value}
-                        onValueChange = {([ newTime ]) => updateAudioCurrentTime(newTime)}
-                        max = {Number.isFinite(songDuration) ? songDuration : 100}
-                    />
-                    <MusicPlayerBtns
-                        $muted = {muted}
-                        $onMutedChange = {setMutedWrapper}
-                        $playing = {playing}
-                        $onPlayingChange = {setPlayingWrapper}
-                        $onNextSongBtnClick = {$onNextSongBtnClick}
-                        $onPreviousSongBtnClick = {$onPrevSongBtnClick}
-                    />
-                </section>
-            </div>
-        );
-    }
-    if (loading) {
-        contentJSX = (
-            <p>
-                Loading...
-            </p>
+            <MusicPlayerInternal 
+                key = {songMp3Url}
+                $songFetchStatus = {songFetchStatus}
+                $muted = {muted}
+                $playing = {playing}
+                $song = {$song}
+                $songDuration = {audioRef.current.duration}
+                $value = {value}
+                $setMuted = {setMutedWrapper}
+                $setPlaying = {setPlayingWrapper}
+                $onNextSongBtnClick = {$onNextSongBtnClick}
+                $onPrevSongBtnClick = {$onPrevSongBtnClick}
+                $onValueChange = {updateAudioCurrentTime}
+            />
         );
     }
 

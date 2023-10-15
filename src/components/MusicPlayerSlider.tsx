@@ -112,7 +112,7 @@ export function MusicPlayerSlider(props: Props) {
                     `
                         inline-block
                         bg-white hover:bg-gray-300
-                        translate-y-[1px]
+                        translate-y-[2px]
                         w-16px
                         h-16px
                         rounded-full

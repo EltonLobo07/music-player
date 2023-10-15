@@ -44,7 +44,7 @@ export function Loading(props: Props) {
                 helpers.formatClassName(
                     `
                         flex
-                        flec-col
+                        flex-col
                         gap-y-2
                         items-center
                         text-center

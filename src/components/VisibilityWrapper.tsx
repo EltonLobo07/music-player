@@ -7,7 +7,9 @@ type Props<TAs extends keyof React.JSX.IntrinsicElements> =
     CustomProps<{
         as: TAs,
         show: boolean
-    }> & React.ComponentProps<TAs>;
+    }> & 
+    React.ComponentProps<TAs> &
+    {inert?: ""};
 
 export function VisibilityWrapper<
     TAs extends keyof React.JSX.IntrinsicElements
