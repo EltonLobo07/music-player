@@ -2,6 +2,7 @@ import { z } from "zod";
 import { Song, SongCategory } from "~/types";
 import { fetchedDataSchemas } from "./fetchedDataSchemas";
 import axios from "axios";
+import { helpers } from "~/helpers";
 
 function transformFetchedSong(song: z.infer<typeof fetchedDataSchemas.songsSchema>[number]): Song {
     return {
@@ -10,7 +11,7 @@ function transformFetchedSong(song: z.infer<typeof fetchedDataSchemas.songsSchem
         artist: song.artist,
         bgAccent: song.accent,
         coverId: song.cover,
-        mp3Url: song.url
+        mp3Url: helpers.processUrl(song.url)
     };
 }
 

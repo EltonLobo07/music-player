@@ -40,6 +40,10 @@ function secondsToMColonSSFormat(seconds: number): string {
     return `${getMinutesPortionOfMColonSSFormat(seconds)}:${getSecondsPortionOfMColonSSFormat(seconds)}`;
 }
 
+function processUrl(url: string): string {
+    return url.split(" ").join("");
+}
+
 export const helpers = {
     formatClassName,
     passClassNameIfTruthy,
@@ -47,5 +51,6 @@ export const helpers = {
     secondsToMColonSSFormat,
     getSecondsPortionOfMColonSSFormat,
     getMinutesPortionOfMColonSSFormat,
-    getSingleSpacedStr
+    getSingleSpacedStr,
+    processUrl
 };
