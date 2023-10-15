@@ -48,7 +48,7 @@ export function SongList(props: Props) {
             font-bold
             text-2xl
             capitalize
-            text-[#8B8882]
+            text-white/50
         `
     );
 
@@ -106,7 +106,7 @@ export function SongList(props: Props) {
                         disabled = {isPersonalizedTabSelected}
                         className = {twMerge(
                             tabBtnClassName,
-                            isPersonalizedTabSelected && "text-white"
+                            isPersonalizedTabSelected ? "text-white" : "hover:text-white/70"
                         )}
                     >
                         for you
@@ -118,7 +118,7 @@ export function SongList(props: Props) {
                         disabled = {isTopTracksTabSelected}
                         className = {twMerge(
                             tabBtnClassName,
-                            isTopTracksTabSelected && "text-white"
+                            isTopTracksTabSelected ? "text-white" : "hover:text-white/70"
                         )}
                     >
                         top tracks
@@ -169,6 +169,7 @@ export function SongList(props: Props) {
                                     $coverId = {song.coverId}
                                     $mp3Url = {song.mp3Url}
                                     $onClick = {() => $onSongClick(songIdx)}
+                                    $selfShowDelayInMs = {songIdx * 75}
                                 />
                             ))
                     }

@@ -162,7 +162,7 @@ export function Header(props: Props) {
                 <span
                     style = {styles.visuallyHidden}
                 >
-                    logout
+                    log out
                 </span>
             </button>
         </header>

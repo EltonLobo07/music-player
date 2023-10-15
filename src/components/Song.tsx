@@ -7,6 +7,8 @@ import {
     CustomProps 
 } from "~/type-helpers";
 import { Song as SongType } from "~/types";
+import { Loading } from "~/components/Loading";
+import { VisibilityWrapper } from "./VisibilityWrapper";
 
 type Props = 
     ChildAndRefOmittedCompProps<"li"> & 
@@ -18,7 +20,8 @@ type Props =
             | "coverId"
             | "mp3Url"
         > & {
-            onClick: () => void
+            onClick: () => void,
+            selfShowDelayInMs?: number
         }
     >;
 
@@ -29,26 +32,43 @@ export function Song(props: Props) {
         $coverId,
         $onClick,
         $mp3Url,
+        $selfShowDelayInMs = 0,
         ...otherProps
     } = props;
 
+    const [showSelf, setShowSelf] = React.useState(false);
     const [duration, setDuration] = React.useState<number | null>(null);
+    const [error, setError] = React.useState<boolean | null>(null);
+
+    React.useEffect(() => {
+        setTimeout(() => {
+            setShowSelf(true);
+        }, $selfShowDelayInMs);
+    }, [$selfShowDelayInMs]);
 
     React.useEffect(() => {
         const audioElement = document.createElement("audio");
         audioElement.preload = "metadata";
         audioElement.src = $mp3Url;
-        const eventName = "loadedmetadata";
-        const eventHandler = () => setDuration(audioElement.duration);
-        audioElement.addEventListener(eventName, eventHandler);
+        const loadedEventName = "loadedmetadata";
+        const loadedEventHandler = () => setDuration(audioElement.duration);
+        const errorEventName = "error";
+        const errorEventHandler = () => setError(true);
+        audioElement.addEventListener(loadedEventName, loadedEventHandler);
+        audioElement.addEventListener(errorEventName, errorEventHandler);
         return () => {
-            audioElement.removeEventListener(eventName, eventHandler);
+            audioElement.removeEventListener(loadedEventName, loadedEventHandler);
+            audioElement.removeEventListener(errorEventName, errorEventHandler);
         };
     }, [$mp3Url]);
 
+    const loading = duration === null && error === null;
+
     return (
-        <li
+        <VisibilityWrapper
             {...otherProps}
+            $as = "li"
+            $show = {showSelf}
             className = {twMerge(
                 helpers.formatClassName(
                     `
@@ -116,6 +136,7 @@ export function Song(props: Props) {
                             `
                                 text-[1.125rem]
                                 leading-6
+                                text-white
                             `
                         )}
                     >
@@ -126,35 +147,86 @@ export function Song(props: Props) {
                             `
                                 text-[0.875rem]
                                 leading-6
-                                text-[#A29F9B]
+                                text-white/60
                             `
                         )}
                     >
                         {$artist}
                     </p>
                 </div>
-                {
-                    duration !== null && (
-                        <time
-                            dateTime = {helpers.getSingleSpacedStr(
-                                `
-                                    ${helpers.getMinutesPortionOfMColonSSFormat(duration)}m
-                                    ${helpers.getSecondsPortionOfMColonSSFormat(duration)}s
-                                `
-                            )}
-                            className = {helpers.formatClassName(
-                                `
-                                    text-[1.125rem]
-                                    leading-6
-                                    text-[#A09E9A]
-                                `
-                            )}
+                <div>
+                    {
+                        <Loading 
+                            $loading = {loading} 
+                            $showLoadedMsg = {false}
+                            $showLoadingMsg = {false}                            
                         >
-                            {helpers.secondsToMColonSSFormat(duration)}
-                        </time>
-                    )
-                }
+                            {
+                                loading
+                                ? "loading duration"
+                                : error
+                                  ? (
+                                    <span
+                                        className = {helpers.formatClassName(
+                                            `
+                                                relative
+                                            `
+                                        )}
+                                    >
+                                        <span
+                                            style = {styles.visuallyHidden}
+                                        >
+                                            error loading duration
+                                        </span>
+                                        <span
+                                            aria-hidden
+                                            className = {helpers.formatClassName(
+                                                `
+                                                    inline-block
+                                                    text-red-500
+                                                    text-sm
+                                                    capitalize
+                                                `
+                                            )}
+                                        >
+                                            failed
+                                        </span>
+                                    </span>
+                                  )
+                                  : "loaded duration"
+                            }
+                        </Loading>
+                    }
+                    {
+                        <VisibilityWrapper
+                            $as = "span"
+                            $show = {duration !== null}
+                        >
+                            {
+                                duration !== null && (
+                                    <time
+                                        dateTime = {helpers.getSingleSpacedStr(
+                                            `
+                                                ${helpers.getMinutesPortionOfMColonSSFormat(duration)}m
+                                                ${helpers.getSecondsPortionOfMColonSSFormat(duration)}s
+                                            `
+                                        )}
+                                        className = {helpers.formatClassName(
+                                            `
+                                                text-[1.125rem]
+                                                leading-6
+                                                text-white/60
+                                            `
+                                        )}
+                                    >
+                                        {helpers.secondsToMColonSSFormat(duration)}
+                                    </time>
+                                )
+                            }
+                        </VisibilityWrapper>
+                    }
+                </div>
             </div>
-        </li>
+        </VisibilityWrapper>
     );
 }

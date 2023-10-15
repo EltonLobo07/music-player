@@ -44,7 +44,7 @@ export function SearchInput(props: Props) {
                             placeholder:capitalize
                             pr-[44px]
                             rounded-[inherit]
-                            placeholder:text-[#AAA7A3]
+                            placeholder:text-white/60
                             text-white
                             text-lg
                         `
@@ -64,7 +64,7 @@ export function SearchInput(props: Props) {
                         right-[16px]
                         pointer-events-none
                         rounded-[inherit]
-                        text-[#7E7A75]
+                        text-white/50
                     `
                 )}
             />
