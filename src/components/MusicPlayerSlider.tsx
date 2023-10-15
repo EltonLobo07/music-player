@@ -10,6 +10,8 @@ type Props =
         "value" | "onValueChange"
     >;
 
+const FLOATING_POINT_CMP_PRECISION = 0.0005;
+
 export function MusicPlayerSlider(props: Props) {
     const {
         value,
@@ -56,8 +58,9 @@ export function MusicPlayerSlider(props: Props) {
             }}
             onPointerUp = {async () => {
                 if (
+                    internalStartValueRef.current !== null &&
                     mouseDownState.captureValue && 
-                    internalStartValueRef.current !== mouseDownState.internalValue[0]
+                    Math.abs(internalStartValueRef.current - mouseDownState.internalValue[0]) > FLOATING_POINT_CMP_PRECISION
                 ) {
                     onValueChange(mouseDownState.internalValue);
                     await new Promise(resolve => setTimeout(() => resolve(undefined), 300));
