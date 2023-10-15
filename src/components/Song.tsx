@@ -198,32 +198,25 @@ export function Song(props: Props) {
                         </Loading>
                     }
                     {
-                        <VisibilityWrapper
-                            $as = "span"
-                            $show = {duration !== null}
-                        >
-                            {
-                                duration !== null && (
-                                    <time
-                                        dateTime = {helpers.getSingleSpacedStr(
-                                            `
-                                                ${helpers.getMinutesPortionOfMColonSSFormat(duration)}m
-                                                ${helpers.getSecondsPortionOfMColonSSFormat(duration)}s
-                                            `
-                                        )}
-                                        className = {helpers.formatClassName(
-                                            `
-                                                text-[1.125rem]
-                                                leading-6
-                                                text-white/60
-                                            `
-                                        )}
-                                    >
-                                        {helpers.secondsToMColonSSFormat(duration)}
-                                    </time>
-                                )
-                            }
-                        </VisibilityWrapper>
+                        duration !== null && (
+                            <time
+                                dateTime = {helpers.getSingleSpacedStr(
+                                    `
+                                        ${helpers.getMinutesPortionOfMColonSSFormat(duration)}m
+                                        ${helpers.getSecondsPortionOfMColonSSFormat(duration)}s
+                                    `
+                                )}
+                                className = {helpers.formatClassName(
+                                    `
+                                        text-[1.125rem]
+                                        leading-6
+                                        text-white/60
+                                    `
+                                )}
+                            >
+                                {helpers.secondsToMColonSSFormat(duration)}
+                            </time>
+                        )
                     }
                 </div>
             </div>
