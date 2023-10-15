@@ -60,6 +60,16 @@ export function MusicPlayer(props: Props) {
     }, []);
 
     const songMp3Url = $song?.mp3Url;
+    const songName = $song?.name;
+    const songArtist = $song?.artist;
+
+    React.useEffect(() => {
+        if (songName !== undefined && songArtist !== undefined) {
+            document.title = `${songName} by ${songArtist}`;
+        } else {
+            document.title = "Music player";
+        }
+    }, [songName, songArtist]);
 
     React.useEffect(() => {
         if (songMp3Url === undefined) {
