@@ -8,6 +8,7 @@ import {
 } from "~/type-helpers";
 import { Song,FetchStatus } from "~/types";
 import { MusicPlayerInternal } from "~/components/MusicPlayerInternal";
+import { useLocalStorageState } from "~/custom-hooks/useLocalStorageState";
 
 type Props = 
     Omit<ChildAndRefOmittedCompProps<"section">, "aria-label"> & 
@@ -27,7 +28,11 @@ export function MusicPlayer(props: Props) {
 
     const [value, setValue] = React.useState([0]);
     const [playing, setPlaying] = React.useState(false);
-    const [muted, setMuted] = React.useState(false);
+    const [muted, setMuted] = useLocalStorageState({
+        initialState: false,
+        isState: (possibleMuted: unknown): possibleMuted is boolean => typeof possibleMuted === "boolean",
+        lsKey: "music-player-muted" 
+    })
     const [songFetchStatus, setSongFetchStatus] = React.useState<FetchStatus>("loaded");
     const audioRef = React.useRef((() => {
         const audioElement = document.createElement("audio");
@@ -35,6 +40,10 @@ export function MusicPlayer(props: Props) {
         audioElement.preload = "auto";
         return audioElement;
     })());
+
+    React.useEffect(() => {
+        audioRef.current.muted = muted;
+    }, [muted]);
 
     const setPlayingWrapper = React.useCallback((newPlaying: boolean) => {
         setPlaying(newPlaying);
@@ -44,11 +53,6 @@ export function MusicPlayer(props: Props) {
         } else {
             audioElement.pause();
         }
-    }, []);
-
-    const setMutedWrapper = React.useCallback((newMuted: boolean) => {
-        setMuted(newMuted);
-        audioRef.current.muted = newMuted;
     }, []);
 
     const updateAudioCurrentTime = React.useCallback((newTime: number) => {
@@ -116,7 +120,7 @@ export function MusicPlayer(props: Props) {
                 $song = {$song}
                 $songDuration = {audioRef.current.duration}
                 $value = {value}
-                $setMuted = {setMutedWrapper}
+                $setMuted = {setMuted}
                 $setPlaying = {setPlayingWrapper}
                 $onNextSongBtnClick = {$onNextSongBtnClick}
                 $onPrevSongBtnClick = {$onPrevSongBtnClick}

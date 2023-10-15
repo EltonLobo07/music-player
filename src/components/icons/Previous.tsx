@@ -9,7 +9,7 @@ export function Previous(props: Props) {
         <svg
             xmlns = "http://www.w3.org/2000/svg"
             fill = "currentColor"
-            stroke = "currentColor"
+            stroke = "none"
             strokeWidth = "1.5"
             viewBox = "0 0 24 24"
             {...props}
