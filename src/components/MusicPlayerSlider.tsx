@@ -81,6 +81,7 @@ export function MusicPlayerSlider(props: Props) {
                         flex
                         items-center
                         cursor-pointer
+                        touch-none
                     `
                 ),
                 otherProps.className
