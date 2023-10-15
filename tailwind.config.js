@@ -1,3 +1,5 @@
+import defaultTheme from "tailwindcss/defaultTheme";
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -16,6 +18,9 @@ export default {
 
         tabAndUp: "45rem", // 720px
         laptopAndUp: "81.25rem" // 1300px
+      },
+      fontFamily: {
+        inter: ["Inter", ...defaultTheme.fontFamily.serif]
       },
       spacing: {
         "8px": "8px",

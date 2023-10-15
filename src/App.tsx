@@ -54,6 +54,7 @@ export function App() {
 					h-full
 					relative
 					isolate
+					font-inter
 				`
 			)}
 		>
