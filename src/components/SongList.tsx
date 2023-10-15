@@ -19,7 +19,8 @@ type Props =
         songs: SongType[],
         onCategoryChange: (category: SongCategory) => void,
         onSongClick: (songIdx: number) => void,
-        fetchStatus: FetchStatus
+        fetchStatus: FetchStatus,
+        selectedSongIdx: number
     }>;
 
 export function SongList(props: Props) {
@@ -29,6 +30,7 @@ export function SongList(props: Props) {
         $onSongClick,
         $songs,
         $fetchStatus,
+        $selectedSongIdx,
         ...otherProps
     } = props;
 
@@ -126,6 +128,7 @@ export function SongList(props: Props) {
                                             $artist = {song.artist}
                                             $coverId = {song.coverId}
                                             $mp3Url = {song.mp3Url}
+                                            $selected = {songIdx === $selectedSongIdx}
                                             $onClick = {() => $onSongClick(songIdx)}
                                             $selfShowDelayInMs = {songIdx * 75}
                                         />
@@ -164,7 +167,7 @@ export function SongList(props: Props) {
                     `
                         ${styles.tw.songListWidth}
                         relative
-                        pt-40px
+                        pt-16px tabAndUp:pt-40px
                         max-h-full
                     `
                 ),

@@ -77,8 +77,6 @@ export function MusicPlayerSlider(props: Props) {
                         rounded-[16px]
                         flex
                         items-center
-                        focus:outline-2
-                        outline-white
                         cursor-pointer
                     `
                 ),
@@ -112,9 +110,9 @@ export function MusicPlayerSlider(props: Props) {
                     `
                         inline-block
                         bg-white hover:bg-gray-300
-                        translate-y-[2px]
-                        w-16px
-                        h-16px
+                        translate-y-[0.125rem]
+                        w-4
+                        h-4
                         rounded-full
                         focus:shadow-[0_0_0_5px_rgba(178,184,180,0.5)]
                     `

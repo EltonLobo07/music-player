@@ -48,7 +48,8 @@ export function App() {
 		}),
 		$songs: songs,
 		$onSongClick: newSongIdx => setSelectedData({...selectedData, songIdx: newSongIdx}),
-		$fetchStatus: songsFetchStatus
+		$fetchStatus: songsFetchStatus,
+		$selectedSongIdx: selectedData.songIdx
 	};
 
 	return (

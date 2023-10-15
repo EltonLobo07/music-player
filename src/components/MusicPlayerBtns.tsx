@@ -37,7 +37,8 @@ export function MusicPlayerBtns(props: Props) {
     } = props;
 
     const cornerBtnsClassName = twMerge(
-        styles.tw.roundedBtn
+        styles.tw.roundedBtn,
+        "hover:text-white"
     );
 
     const btnsNearPlayPauseClassName = helpers.formatClassName(

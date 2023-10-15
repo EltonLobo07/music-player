@@ -32,6 +32,7 @@ export const styles = {
                 text-white
                 hover:text-gray-300
             `
-        )
+        ),
+        imgBgColor: "bg-white/5"
     }
 };

@@ -147,6 +147,7 @@ export function MusicPlayerInternal(props: Props) {
                             aspect-square
                             object-center
                             rounded-[8px]
+                            ${styles.tw.imgBgColor}
                         `
                     )}
                 />

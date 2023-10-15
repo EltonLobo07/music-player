@@ -21,6 +21,7 @@ type Props =
             | "mp3Url"
         > & {
             onClick: () => void,
+            selected: boolean,
             selfShowDelayInMs?: number
         }
     >;
@@ -32,6 +33,7 @@ export function Song(props: Props) {
         $coverId,
         $onClick,
         $mp3Url,
+        $selected,
         $selfShowDelayInMs = 0,
         ...otherProps
     } = props;
@@ -76,7 +78,11 @@ export function Song(props: Props) {
                         px-[16px]
                         py-4
                         rounded-[8px]
-                        hover:bg-white/10
+                        ${
+                            $selected
+                            ? ""
+                            : "hover:bg-white/10"
+                        }
                     `
                 ),
                 props.className
@@ -84,6 +90,7 @@ export function Song(props: Props) {
         >
             <button
                 type = "button"
+                disabled = {$selected}
                 onClick = {$onClick}
                 className = {helpers.formatClassName(
                     `
@@ -121,6 +128,7 @@ export function Song(props: Props) {
                             h-48px
                             rounded-full
                             object-center
+                            ${styles.tw.imgBgColor}
                         `
                     )}
                 />

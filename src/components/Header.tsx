@@ -22,6 +22,8 @@ export function Header(props: Props) {
         $onCategoryChange,
         $songs,
         $onSongClick,
+        $fetchStatus,
+        $selectedSongIdx,
         ...otherProps
     } = props;
 
@@ -92,6 +94,8 @@ export function Header(props: Props) {
                     $category = {$category}
                     $onCategoryChange = {$onCategoryChange}
                     $songs = {$songs}
+                    $fetchStatus = {$fetchStatus}
+                    $selectedSongIdx = {$selectedSongIdx}
                     $onSongClick = {newSongIdx => {
                         setSongListDialogOpen(false);
                         $onSongClick(newSongIdx);
@@ -156,6 +160,7 @@ export function Header(props: Props) {
                             h-full
                             rounded-[inherit]
                             object-center
+                            ${styles.tw.imgBgColor}
                         `
                     )}
                 />

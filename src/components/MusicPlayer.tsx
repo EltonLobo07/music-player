@@ -33,7 +33,7 @@ export function MusicPlayer(props: Props) {
         isState: (possibleMuted: unknown): possibleMuted is boolean => typeof possibleMuted === "boolean",
         lsKey: "music-player-muted" 
     })
-    const [songFetchStatus, setSongFetchStatus] = React.useState<FetchStatus>("loaded");
+    const [songFetchStatus, setSongFetchStatus] = React.useState<FetchStatus>("loading");
     const audioRef = React.useRef((() => {
         const audioElement = document.createElement("audio");
         audioElement.loop = true;

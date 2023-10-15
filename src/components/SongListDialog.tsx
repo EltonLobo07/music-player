@@ -21,6 +21,8 @@ export function SongListDialog(props: Props) {
         $onCategoryChange,
         $songs,
         $onSongClick,
+        $fetchStatus,
+        $selectedSongIdx,
         open,
         ...otherProps
     } = props;
@@ -136,6 +138,8 @@ export function SongListDialog(props: Props) {
                                 $onCategoryChange = {$onCategoryChange}
                                 $songs = {$songs}
                                 $onSongClick = {$onSongClick}
+                                $fetchStatus = {$fetchStatus}
+                                $selectedSongIdx = {$selectedSongIdx}
                                 className = {helpers.formatClassName(
                                     `
                                         text-white
