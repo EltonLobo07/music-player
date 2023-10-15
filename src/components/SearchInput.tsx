@@ -24,7 +24,7 @@ export function SearchInput(props: Props) {
             className = {twMerge(
                 helpers.formatClassName(
                     `
-                        bg-[#2A2419]
+                        bg-white/5
                         relative
                         rounded-[8px]
                     `

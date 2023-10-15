@@ -8,6 +8,7 @@ import { MusicPlayer } from "~/components/MusicPlayer";
 import { songsService } from "~/services/songsService";
 import { Song } from "~/types";
 import { FilterCustomProps } from "~/type-helpers";
+import { Background } from "~/components/Background";
 
 export function App() {
 	const [selectedData, setSelectedData] = 
@@ -49,12 +50,24 @@ export function App() {
 		<div
 			className = {helpers.formatClassName(
 				`
-					bg-black
 					text-white
 					h-full
+					relative
+					isolate
 				`
 			)}
 		>
+			{/*
+				For performance reasons, 
+					I prefer using transitions only for "transform" and "opacity",
+					that's why I have made a resuable Background component
+			*/}
+			<Background 
+				$background = {
+					`linear-gradient(108.18deg, ${selectedData.songIdx !== -1 ? songs[selectedData.songIdx].bgAccent : "black"} 2.46%, black 99.84%)`
+				}
+				className = "z-0"
+			/>
 			<div
 				className = {twMerge(
 					styles.tw.maxWidthWrapper,
@@ -65,6 +78,7 @@ export function App() {
 							tabAndUp:gap-x-[1.8125rem] laptopAndUp:gap-x-[7.25rem]
 							gap-y-[1.8125rem] tabAndUp:gap-y-0
 							h-full
+							z-10
 						`
 					)
 				)}

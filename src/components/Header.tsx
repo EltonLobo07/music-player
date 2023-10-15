@@ -133,7 +133,6 @@ export function Header(props: Props) {
                         h-48px
                         rounded-full
                         relative
-                        bg-black
                     `
                 )}
             >

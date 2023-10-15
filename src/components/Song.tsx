@@ -52,12 +52,11 @@ export function Song(props: Props) {
             className = {twMerge(
                 helpers.formatClassName(
                     `
-                        border border-black
                         relative
                         px-[16px]
                         py-4
                         rounded-[8px]
-                        hover:bg-[#252018]
+                        hover:bg-white/10
                     `
                 ),
                 props.className
